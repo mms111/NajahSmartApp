@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'Customer.dart';
+import 'package:najah_smartapp/Entity/Customer.dart';
 
-class CustomerProfile extends StatelessWidget {
+class CustomerProfileScreen extends StatelessWidget {
+  final Customer _customer;
+  CustomerProfileScreen(this._customer);
+
   @override
   Widget build(BuildContext context) {
   BuildContext _context = context;
@@ -39,7 +42,7 @@ class CustomerProfile extends StatelessWidget {
                         backgroundColor: Colors.blueGrey[900],
                         maxRadius: _height * 0.075,
                         child: CircleAvatar(
-                          backgroundImage: Customer().profilePicture,
+                          backgroundImage: _customer.profilePicture,
                           maxRadius: _height * 0.07,
                         ),
                       ),
@@ -49,7 +52,7 @@ class CustomerProfile extends StatelessWidget {
                   Container(
                     padding: EdgeInsets.only(top: 10.0),
                     child: Text(
-                      Customer().name,
+                      _customer.name,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: _height * 0.035, 
@@ -71,16 +74,11 @@ class CustomerProfile extends StatelessWidget {
                 child: ListView(
                   children: <Widget>[
 
-                    Padding(
-                      padding: EdgeInsets.only(top: 10.0),
-                      child: listView(_context, Icons.monetization_on, "Credit: RM100"),
-                    ),
-
+                    listView(_context, Icons.monetization_on, "Credit: RM" + _customer.credit.toString() + "0"),
                     listView(_context, Icons.person_pin_circle, "Status: Active"),
                     listView(_context, Icons.card_membership, "Exp: 20/05/2020"),
-                    listView(_context, Icons.email, Customer().email),
-                    listView(_context, Icons.phone, Customer().phone),
-                    
+                    listView(_context, Icons.email, _customer.email),
+                    listView(_context, Icons.phone, _customer.phone),
                   ],
                 ),
               ),

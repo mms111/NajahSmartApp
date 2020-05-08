@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:najah_smartapp/LoginSplash.dart';
-import 'SplashScreen.dart';
-import 'LoginPage.dart';
-import 'LogoutSplash.dart';
+import 'package:najah_smartapp/View/HomeScreen.dart';
+import 'View/SplashScreen.dart';
+import 'View/LoginScreen.dart';
+import 'View/LogoutSplashScreen.dart';
 
 void main() => runApp(MaterialApp(
   debugShowCheckedModeBanner: false,
   routes: {
-    'loginScreen' : (context) => LoginPage(),
-    'loginSplashScreen' : (context) => LoginSplash(),
-    'logoutSplashScreen' : (context) => LogoutSplash(),
+    '/home' : (context) => HomeScreen(),
+    '/loginScreen' : (context) => LoginScreen(),
+    '/logoutSplashScreen' : (context) => LogoutSplashScreen(),
   },
   title: 'Najah SmartApp',
   theme: ThemeData(

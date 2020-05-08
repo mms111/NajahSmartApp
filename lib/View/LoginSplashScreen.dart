@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
-import 'AppBottomNavigationBar.dart';
+import 'package:najah_smartapp/Presenter/LoginPresenter.dart';
 
-class LoginSplash extends StatefulWidget {
+class LoginSplashScreen extends StatefulWidget {
+  final String _email;
+  final String _password;
+  LoginSplashScreen(this._email, this._password);
   @override
-  _LoginSplashState createState() => _LoginSplashState();
+  _LoginSplashScreenState createState() => _LoginSplashScreenState();
 }
 
-class _LoginSplashState extends State<LoginSplash> {
-
+class _LoginSplashScreenState extends State<LoginSplashScreen> {
+  final LoginPresenter loginPresenter = new LoginPresenter();
 
   @override
   void initState(){
@@ -15,10 +18,7 @@ class _LoginSplashState extends State<LoginSplash> {
     super.initState();
     new Future.delayed(
         const Duration(seconds: 2),
-        () => Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) =>AppBottomNavigationBar()),
-            ));
+        () => loginPresenter.validateUser(context, widget._email, widget._password));
   }
 
   @override

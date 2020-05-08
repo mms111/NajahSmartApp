@@ -11,7 +11,7 @@ class AppLogo extends StatelessWidget {
     return Container(
       height: _height * 0.2,
       child: Image(
-        image: AssetImage('images/logo.png'),
+        image: AssetImage('assets/images/logo.png'),
         height: _height * 0.2,
       ),
     );

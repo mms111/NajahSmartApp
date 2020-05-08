@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class AppTextField extends StatelessWidget {
+class InputTextField extends StatelessWidget {
 
   final String _hintText;
   final Icon _icon;
-  final bool isPassword;
-  final TextEditingController textController;
-  AppTextField(this._icon, this._hintText, this.textController, this.isPassword);
+  final bool _isPassword;
+  final TextEditingController _textController;
+  InputTextField(this._icon, this._hintText, this._textController, this._isPassword);
 
   @override
   Widget build(BuildContext context) {
@@ -37,12 +37,12 @@ class AppTextField extends StatelessWidget {
       ),
 
       child: TextFormField(
-        controller: textController,
+        controller: _textController,
         style: TextStyle(
           color: Colors.white,
           fontSize: _height * 0.02,
         ),
-        obscureText: isPassword,
+        obscureText: _isPassword,
         cursorColor: Colors.green,
         autocorrect: true,
         decoration: InputDecoration(

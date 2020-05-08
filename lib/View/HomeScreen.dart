@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 
-class HomePage extends StatelessWidget {
+class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class HomePage extends StatelessWidget {
             Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('images/homeBg.png'),
+                  image: AssetImage('assets/images/homeBg.png'),
                   fit: BoxFit.cover,
                 )
               ),
@@ -64,7 +64,7 @@ class HomePage extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20.0),
                           ),
-                          onPressed: () {Navigator.pushNamed(context, 'loginScreen');}
+                          onPressed: () {Navigator.of(context).pushNamed('/loginScreen');}
                         ),
                       ),
                     )

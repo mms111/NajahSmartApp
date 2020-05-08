@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:najah_smartapp/HomePage.dart';
 
-class LogoutSplash extends StatefulWidget {
+class LogoutSplashScreen extends StatefulWidget {
   @override
-  _LogoutSplashState createState() => _LogoutSplashState();
+  _LogoutSplashScreenState createState() => _LogoutSplashScreenState();
 }
 
-class _LogoutSplashState extends State<LogoutSplash> {
+class _LogoutSplashScreenState extends State<LogoutSplashScreen> {
 
   @override
   void initState(){
@@ -14,10 +13,7 @@ class _LogoutSplashState extends State<LogoutSplash> {
     super.initState();
     new Future.delayed(
         const Duration(seconds: 2),
-        () => Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) =>HomePage()),
-            ));
+        () => Navigator.of(context).pushReplacementNamed('/home'));
   }
 
   @override

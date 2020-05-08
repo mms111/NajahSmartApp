@@ -1,28 +1,25 @@
+
 import 'package:flutter/material.dart';
-import 'package:najah_smartapp/AppBottomNavigationBar.dart';
-import 'AppTextField.dart';
-import 'AppLogo.dart';
-import 'Customer.dart';
+import 'package:najah_smartapp/CustomWidgets/InputTextField.dart';
+import 'package:najah_smartapp/CustomWidgets/AppLogo.dart';
+import 'package:najah_smartapp/View/LoginSplashScreen.dart';
 
-class LoginPage extends StatefulWidget {
-
+class LoginScreen extends StatefulWidget {
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginScreenState extends State<LoginScreen> {
 
   final _loginFormKey = GlobalKey<FormState>();
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  BuildContext _context;
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
 
     double _height = MediaQuery.of(context).size.height;
     double _width = MediaQuery.of(context).size.width;
-    _context = context;
 
     return SafeArea(
       child: Scaffold(
@@ -41,19 +38,23 @@ class _LoginPageState extends State<LoginPage> {
 
                   Padding(
                     padding: EdgeInsets.only(top: 45.0),
-                    child: AppTextField(Icon(Icons.email, color: Colors.green,), "Email", emailController, false),
+                    child: InputTextField(Icon(Icons.email, color: Colors.green,), "Email", _emailController, false),
                   ),
 
-                  AppTextField(Icon(Icons.lock_open, color: Colors.green,), "Passwowrd", passwordController, true),
+                  InputTextField(Icon(Icons.lock_open, color: Colors.green,), "Passwowrd", _passwordController, true),
 
                   Container(
                     height: _height * 0.1,
                     alignment: Alignment.center,
-                    child: Text(
-                      "Forgot Password?",
-                      style: TextStyle(
-                        color: Colors.green,
-                        fontSize: _height * 0.02,
+                    child: InkWell(
+                      onTap: () {},
+                      child: Text(
+                        "Forgot Password?",
+                        style: TextStyle(
+                          color: Colors.green,
+                          fontSize: _height * 0.02,
+                          decoration: TextDecoration.underline
+                        ),
                       ),
                     ),
                   ),
@@ -78,7 +79,18 @@ class _LoginPageState extends State<LoginPage> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20.0),
                           ),
-                          onPressed: submit,
+                          onPressed: () {
+                            if(_loginFormKey.currentState.validate())
+                            {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) =>LoginSplashScreen(
+                                    _emailController.text, _passwordController.text
+                                  )
+                                )
+                              );
+                            }
+                          }
                         ),
                       ),
                     ),
@@ -91,44 +103,5 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-
-  submit()
-  {
-    
-    if(_loginFormKey.currentState.validate())
-    {
-      if(emailController.text == Customer().email && passwordController.text == Customer().password)
-      {
-        Navigator.of(context).pushNamedAndRemoveUntil(
-          'loginSplashScreen',
-          (Route<dynamic> route) => false,
-        );
-      }
-      else
-      {
-        return showDialog(
-          context: _context,
-          barrierDismissible: false,
-          builder: (context) => AlertDialog(
-          title: Text("Can't find account"),
-          content: Text("incorrect email or password"),
-          actions: <Widget>[
-            Container(
-              alignment: Alignment.center,
-              child: FlatButton(
-                child: Text('Ok'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                color: Colors.green,
-              ),
-            )
-          ],
-          backgroundColor: Colors.blueGrey[50],
-        )
-        );
-      }
-      
-    }
-  }
+  
 }

@@ -1,26 +1,28 @@
 import 'package:flutter/material.dart';
-import 'CustomerDashboard.dart';
-import 'CustomerProfile.dart';
-import 'SettingPage.dart';
-class AppBottomNavigationBar extends StatefulWidget {
+import 'package:najah_smartapp/Entity/Admin.dart';
+import 'AdminDashboardScreen.dart';
+import 'AdminSettingScreen.dart';
+
+class AdminAppBottomNavigationBar extends StatefulWidget {
+  final Admin _admin;
+  AdminAppBottomNavigationBar(this._admin);
+  get admin => _admin;
   @override
-  _AppBottomNavigationBarState createState() => _AppBottomNavigationBarState();
+  _AdminAppBottomNavigationBarState createState() => _AdminAppBottomNavigationBarState();
 }
 
-class _AppBottomNavigationBarState extends State<AppBottomNavigationBar> {
+class _AdminAppBottomNavigationBarState extends State<AdminAppBottomNavigationBar> {
 
   int _currentIndex = 0;
-  final List<Widget> _screens = [
-    CustomerDashboard(),
-    CustomerProfile(),
-    SettingPage(),
-  ];
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> _screens = [
+      AdminDashboardScreen(widget.admin),
+      AdminSettingScreen(widget.admin),
+    ];
     return SafeArea(
       child: Scaffold(
-
         body: _screens[_currentIndex],
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: _currentIndex,
@@ -29,7 +31,6 @@ class _AppBottomNavigationBarState extends State<AppBottomNavigationBar> {
           items: [
 
             getItem(Icon(Icons.home),Text("Home")),
-            getItem(Icon(Icons.person),Text("Profile")),
             getItem(Icon(Icons.settings), Text("Settings")),
 
           ],
@@ -52,4 +53,5 @@ class _AppBottomNavigationBarState extends State<AppBottomNavigationBar> {
       
     );
   }
+  
 }
