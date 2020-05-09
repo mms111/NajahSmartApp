@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:najah_smartapp/Entity/Customer.dart';
+import 'package:najah_smartapp/Entity/Package.dart';
 import 'package:najah_smartapp/Presenter/AdminPresenter.dart';
 
-class UsersListScreen extends StatelessWidget {
-  final List<Customer> _customersList;
-  UsersListScreen(this._customersList);
+class PackagesListScreen extends StatelessWidget {
+  final List<Package> _packagesList;
+  PackagesListScreen(this._packagesList);
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -13,20 +13,20 @@ class UsersListScreen extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Colors.green,
           title: Text(
-            "Users List"
+            "Packages List"
           ),
           centerTitle: true,
         ),
         body: Container(
           child: ListView(
-            children: _customersList.map((customer)=>userRow(context,customer)).toList()
+            children: _packagesList.map((package)=>userRow(context,package)).toList()
           )
         ),
       ),
     );
   }
 
-  Widget userRow(BuildContext context, Customer customer)
+  Widget userRow(BuildContext context, Package package)
   {
     return Padding(
       padding: const EdgeInsets.only(top: 25.0),
@@ -40,39 +40,45 @@ class UsersListScreen extends StatelessWidget {
             Expanded(
               flex: 1,
               child: Text(
-                (_customersList.indexOf(customer)+1).toString(),
+                (_packagesList.indexOf(package)+1).toString(),
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 20.0,
+                  fontSize: 15.0,
                   fontWeight: FontWeight.bold
                 ),
               ),
             ),
             Expanded(
-              flex: 5,
+              flex: 6,
               child: Text(
-                customer.name,
+                package.title,
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 20.0,
+                  fontSize: 15.0,
                   fontWeight: FontWeight.bold
                 ),
               ),
             ),
             Expanded(
-              flex: 2,
-              child: InkWell(
-                onTap: () {
-                  AdminPresenter().showUserProfile(context, customer);
-                },
-                child: Text(
-                  "View",
-                  style: TextStyle(
-                    color: Colors.blue,
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
-                    decoration: TextDecoration.underline
-                  ),
+              flex: 3,
+              child: Text(
+                package.validity,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 15.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 3,
+              child: Text(
+                "RM" + package.price.toString() + "0",
+                style: TextStyle(
+                  color: Colors.green,
+                  fontSize: 15.0,
+                  fontWeight: FontWeight.bold,
+                  decoration: TextDecoration.underline
                 ),
               ),
             ),
@@ -80,13 +86,13 @@ class UsersListScreen extends StatelessWidget {
               flex: 2,
               child: InkWell(
                 onTap: () {
-                  AdminPresenter().deleteUser(context, customer);
+                  AdminPresenter().deletPackage(context, package);
                 },
                 child: Text(
                   "Delete",
                   style: TextStyle(
                     color: Colors.red,
-                    fontSize: 20.0,
+                    fontSize: 15.0,
                     fontWeight: FontWeight.bold,
                     decoration: TextDecoration.underline
                   ),

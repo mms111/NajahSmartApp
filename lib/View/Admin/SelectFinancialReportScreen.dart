@@ -60,8 +60,8 @@ class _SelectFinancialReportScreenState extends State<SelectFinancialReportScree
                     showDatePicker(
                       context: context,
                       initialDate: DateTime.now(),
-                      firstDate: DateTime(2000),
-                      lastDate: DateTime(2021),
+                      firstDate: DateTime(2020),
+                      lastDate: DateTime.now(),
                     ).then((date){
                       setState(() {
                         _fromDate=date;
@@ -102,8 +102,8 @@ class _SelectFinancialReportScreenState extends State<SelectFinancialReportScree
                       showDatePicker(
                         context: context,
                         initialDate: DateTime.now(),
-                        firstDate: DateTime(2000),
-                        lastDate: DateTime(2021),
+                        firstDate: DateTime(2020),
+                        lastDate: DateTime.now(),
                       ).then((date){
                         setState(() {
                           _tillDate=date;
@@ -126,7 +126,7 @@ class _SelectFinancialReportScreenState extends State<SelectFinancialReportScree
                     height: _height * 0.06,
                     child: RaisedButton(
                       child: Text(
-                        "Top-up",
+                        "View Report",
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: _height * 0.02,

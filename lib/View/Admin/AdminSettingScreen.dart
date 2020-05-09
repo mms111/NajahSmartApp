@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:najah_smartapp/CustomWidgets/AdminListTile.dart';
 import 'package:najah_smartapp/Entity/Admin.dart';
 
 class AdminSettingScreen extends StatefulWidget {
@@ -72,7 +73,7 @@ class _AdminSettingScreenState extends State<AdminSettingScreen> {
               ),
             ),
 
-            appListTile(context, Icons.account_circle, "Edit Profile", ""),
+            AdminListTile(context, Icons.account_circle, "Edit Profile", ""),
 
             Padding(
               padding: EdgeInsets.only(top: 12.0),
@@ -138,39 +139,9 @@ class _AdminSettingScreenState extends State<AdminSettingScreen> {
               ),
             ),
 
-            appListTile(context, Icons.lock, "Logout", "/logoutSplashScreen"),
+            AdminListTile(context, Icons.lock, "Logout", "/logoutSplashScreen"),
 
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget appListTile(BuildContext _context, IconData _icon, String _title, String action)
-  {
-    return Padding(
-      padding: EdgeInsets.only(top: 12.0),
-      child: Container(
-        height: MediaQuery.of(_context).size.height * 0.075,
-        color: Colors.blueGrey[800],
-        child: Center(
-          child: ListTile(
-            leading: Icon(
-              _icon,
-              size: MediaQuery.of(_context).size.height * 0.035,
-              color: Colors.white,
-            ),
-            title: Text(
-              _title,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: MediaQuery.of(_context).size.height * 0.02,
-              ),
-            ),
-            onTap: () {
-              Navigator.pushReplacementNamed(_context, action);
-            },
-          ),
         ),
       ),
     );

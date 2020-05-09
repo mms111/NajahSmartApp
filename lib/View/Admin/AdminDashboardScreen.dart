@@ -70,7 +70,7 @@ class AdminDashboardScreen extends StatelessWidget {
                             color: Colors.blueGrey[800],
                             child: InkWell(
                               onTap: () {},
-                              child: DashboardItem(Icons.code, "Attendance QR")
+                              child: DashboardItem(Icons.people, "Manage Attendance")
                             ),
                           ),
                           Card(
@@ -120,8 +120,10 @@ class AdminDashboardScreen extends StatelessWidget {
                             margin: EdgeInsets.all(15.0),
                             color: Colors.blueGrey[800],
                             child: InkWell(
-                              onTap: () {},
-                              child: DashboardItem(Icons.people, "Attendance List")
+                              onTap: () {
+                                AdminPresenter().onRequest(context, '/managePackages');
+                              },
+                              child: DashboardItem(Icons.card_membership, "Manage Packages")
                             ),
                           ),
                         ]

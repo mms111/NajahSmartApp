@@ -13,6 +13,7 @@ void main() => runApp(MaterialApp(
   },
   title: 'Najah SmartApp',
   theme: ThemeData(
+    primarySwatch: Colors.green,
     primaryColor: Colors.green,
   ),
   home: SplashScreen(),
