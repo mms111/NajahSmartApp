@@ -38,10 +38,22 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   Padding(
                     padding: EdgeInsets.only(top: 45.0),
-                    child: InputTextField(Icon(Icons.email, color: Colors.green,), "Email", _emailController, false),
+                    child: InputTextField(
+                      Icon(Icons.email, color: Colors.green,), 
+                      "Email", 
+                      _emailController, 
+                      false,
+                      TextInputType.text,
+                    ),
                   ),
 
-                  InputTextField(Icon(Icons.lock_open, color: Colors.green,), "Passwowrd", _passwordController, true),
+                  InputTextField(
+                    Icon(Icons.lock_open, color: Colors.green,), 
+                    "Passwowrd", 
+                    _passwordController, 
+                    true,
+                    TextInputType.text,
+                  ),
 
                   Container(
                     height: _height * 0.1,

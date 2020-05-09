@@ -6,7 +6,8 @@ class InputTextField extends StatelessWidget {
   final Icon _icon;
   final bool _isPassword;
   final TextEditingController _textController;
-  InputTextField(this._icon, this._hintText, this._textController, this._isPassword);
+  final TextInputType _textInputType;
+  InputTextField(this._icon, this._hintText, this._textController, this._isPassword,this._textInputType);
 
   @override
   Widget build(BuildContext context) {
@@ -17,27 +18,15 @@ class InputTextField extends StatelessWidget {
 
       decoration: BoxDecoration(
         color: Colors.transparent,
-        border: Border(
-          bottom: BorderSide(
+        border: Border.all(
             color: Colors.green
-          ),
-
-          left: BorderSide(
-            color: Colors.green,
-          ),
-
-          top: BorderSide(
-            color: Colors.green,
-          ),
-
-          right: BorderSide(
-            color: Colors.green,
-          )
         )
       ),
 
       child: TextFormField(
+        textAlignVertical: TextAlignVertical(y: 0.1),
         controller: _textController,
+        keyboardType: _textInputType,
         style: TextStyle(
           color: Colors.white,
           fontSize: _height * 0.02,

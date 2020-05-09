@@ -98,7 +98,9 @@ class AdminDashboardScreen extends StatelessWidget {
                             margin: EdgeInsets.all(15.0),
                             color: Colors.blueGrey[800],
                             child: InkWell(
-                              onTap: () {},
+                              onTap: () {
+                                AdminPresenter().onRequest(context, "/topUp");
+                              },
                               child: DashboardItem(Icons.attach_money, "Top-up")
                             ),
                           ),
@@ -107,7 +109,9 @@ class AdminDashboardScreen extends StatelessWidget {
                             margin: EdgeInsets.all(15.0),
                             color: Colors.blueGrey[800],
                             child: InkWell(
-                              onTap: () {},
+                              onTap: () {
+                                AdminPresenter().onRequest(context, '/selectFinancialReport');
+                              },
                               child: DashboardItem(Icons.description, "Financial Report")
                             ),
                           ),

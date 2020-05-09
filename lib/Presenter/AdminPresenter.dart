@@ -3,9 +3,13 @@ import 'package:najah_smartapp/Entity/Admin.dart';
 import 'package:najah_smartapp/Entity/Customer.dart';
 import 'package:najah_smartapp/Model/AdminDao.dart';
 import 'package:najah_smartapp/Model/CustomerDao.dart';
+import 'package:najah_smartapp/Model/TopUpDao.dart';
 import 'package:najah_smartapp/View/Admin/AddUserScreen.dart';
 import 'package:najah_smartapp/View/Admin/AdminAppBottomNavigationBar.dart';
+import 'package:najah_smartapp/View/Admin/FinancialReportScreen.dart';
 import 'package:najah_smartapp/View/Admin/ManageUsersScreen.dart';
+import 'package:najah_smartapp/View/Admin/SelectFinancialReportScreen.dart';
+import 'package:najah_smartapp/View/Admin/TopUpScreen.dart';
 import 'package:najah_smartapp/View/Admin/UsersListScreen.dart';
 import 'package:najah_smartapp/CustomWidgets/AlertDialogBox.dart';
 import 'package:najah_smartapp/View/Customer/CustomerProfileScreen.dart';
@@ -14,6 +18,7 @@ class AdminPresenter{
 
   Admin _admin;
   AdminDao adminDao = new AdminDao();
+  TopUpDao topUpDao = new TopUpDao();
 
   void setAdmin(Admin admin)
   {
@@ -45,6 +50,22 @@ class AdminPresenter{
           MaterialPageRoute(builder: (context) => UsersListScreen())
         );
         break;
+      case '/topUp' :
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => TopUpScreen())
+        );
+        break;
+      case '/selectFinancialReport' :
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => SelectFinancialReportScreen())
+        );
+        break;
+      case '/financialReport' :
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => FinancialReportScreen())
+        );
+        break;
+      
     }
   }
 
@@ -88,7 +109,7 @@ class AdminPresenter{
       MaterialPageRoute(builder: (context) => CustomerProfileScreen(customer))
     );
   }
-
+  
   deleteUser(BuildContext context, Customer customer)
   {
     return showDialog(
@@ -120,5 +141,26 @@ class AdminPresenter{
         backgroundColor: Colors.blueGrey[50],
       )
     );
+  }
+
+  topUp(BuildContext context, String email, double amount)
+  {
+    Customer customer = adminDao.findUser(email);
+    if(customer==null)
+    {
+      return AlertDialogBox(context, "Error!", "User not found.");
+    }
+    else
+    {
+      topUpDao.updateUserAmount(customer, amount);
+       Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => TopUpScreen())
+      );
+      return AlertDialogBox(
+        context, 
+        "Top-up Successful.", 
+        "RM" +amount.toString() +"0 has been successfully added to " + customer.name + "'s account."
+      );
+    }
   }
 }
