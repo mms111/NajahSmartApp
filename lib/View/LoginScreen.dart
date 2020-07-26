@@ -55,11 +55,15 @@ class _LoginScreenState extends State<LoginScreen> {
                     TextInputType.text,
                   ),
 
+                  SizedBox(height: _height*0.025),
+
                   Container(
-                    height: _height * 0.1,
+                   
                     alignment: Alignment.center,
                     child: InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.of(context).pushNamed('/forgotPasswordScreen');
+                      },
                       child: Text(
                         "Forgot Password?",
                         style: TextStyle(
@@ -71,8 +75,39 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
 
+                  SizedBox(height: _height*0.015),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          "Don't have an account?",
+                          style: TextStyle(
+                            color: Colors.green,
+                            fontSize: _height * 0.02,
+                            
+                          ),
+                        ),
+                        InkWell(
+                      onTap: () {
+                        Navigator.of(context).pushNamed('/signUpScreen');
+                      },
+                      child: Text(
+                        " Sign Up",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: _height * 0.02,
+                          fontWeight: FontWeight.bold
+                        ),
+                      ),
+                    ),
+                      ],
+                  ),
+                  
+
+          
                   Padding(
-                    padding: EdgeInsets.only(top: 15.0),
+                    padding: EdgeInsets.only(top: 25.0),
                     child: Container(
                       alignment: Alignment.center,
                       child: ButtonTheme(

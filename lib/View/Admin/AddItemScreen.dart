@@ -1,33 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:najah_smartapp/CustomWidgets/AlertDialogBox.dart';
 import 'package:najah_smartapp/CustomWidgets/InputTextField.dart';
-import 'package:najah_smartapp/Entity/Customer.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'package:najah_smartapp/View/Customer/EditProfileSplashScreen.dart';
+import 'package:najah_smartapp/View/Admin/AddItemSplashScreen.dart';
 
-class CustomerEditProfile extends StatefulWidget {
+class AddItemScreen extends StatefulWidget {
   
-  final Customer _customer;
-  CustomerEditProfile(this._customer);
 
   @override
-  _CustomerEditProfileState createState() => _CustomerEditProfileState();
+  _AddItemScreenState createState() => _AddItemScreenState();
 }
 
-class _CustomerEditProfileState extends State<CustomerEditProfile> {
+class _AddItemScreenState extends State<AddItemScreen> {
   
   File _image;
-  final _editProfileFormKey = GlobalKey<FormState>();
+  final _additemFormKey = GlobalKey<FormState>();
   TextEditingController _nameController = TextEditingController();
-  TextEditingController _phoneController = TextEditingController();
+  TextEditingController _priceController = TextEditingController();
 
-  @override
-  void initState() {
-    super.initState();
-    _nameController = new TextEditingController(text: widget._customer.name);
-    _phoneController = new TextEditingController(text: widget._customer.phone);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +42,7 @@ class _CustomerEditProfileState extends State<CustomerEditProfile> {
         appBar: AppBar(
           backgroundColor: Colors.green,
           title: Text(
-            "Edit Profile"
+            "Add Item"
           ),
           centerTitle: true,
         ),
@@ -61,7 +52,7 @@ class _CustomerEditProfileState extends State<CustomerEditProfile> {
             width: _width * 0.9,
             height: _height * 0.7,
             child: Form(
-              key: _editProfileFormKey,
+              key: _additemFormKey,
               child: ListView(
                 
                 children: <Widget>[
@@ -82,7 +73,7 @@ class _CustomerEditProfileState extends State<CustomerEditProfile> {
                                 _image,
                                 fit: BoxFit.fill,
                               ):Image.network(
-                                widget._customer.photoUrl,
+                                'https://firebasestorage.googleapis.com/v0/b/najah-smart-app-map.appspot.com/o/shopping.png?alt=media&token=a2316ace-82f4-4d8e-bc88-feab440b4af3',
                                 fit: BoxFit.fill,
                               ),
                             ),
@@ -121,9 +112,9 @@ class _CustomerEditProfileState extends State<CustomerEditProfile> {
                   Padding(
                       padding: EdgeInsets.only(top: 15.0),
                       child: InputTextField(
-                        Icon(Icons.phone, color: Colors.green,),
-                        "Phone No", 
-                        _phoneController, 
+                        Icon(Icons.attach_money, color: Colors.green,),
+                        "Price", 
+                        _priceController, 
                         false,
                         TextInputType.number,
                       ),
@@ -138,7 +129,7 @@ class _CustomerEditProfileState extends State<CustomerEditProfile> {
                         height: _height * 0.06,
                         child: RaisedButton(
                           child: Text(
-                            "Update",
+                            "Add Item",
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: _height * 0.02,
@@ -151,22 +142,18 @@ class _CustomerEditProfileState extends State<CustomerEditProfile> {
                           ),
                           onPressed: () {
                             
-                            if(_editProfileFormKey.currentState.validate())
+                            if(_additemFormKey.currentState.validate())
                             {
-                              if(_image==null && 
-                                 _nameController.text == widget._customer.name && 
-                                 _phoneController.text == widget._customer.phone)
+                              if(_image==null)
                               {
-                                 return AlertDialogBox(context, "Alert!", "You didn't change anything.");
+                                return AlertDialogBox(context, "Alert!", "Please choose image for the item.");
                               }
-                              
                               else
                               {
                                 Navigator.of(context).push(
-                                MaterialPageRoute(builder: (context) => EditProfileSplashScreen(
-                                  _image,widget._customer, _nameController.text, _phoneController.text)));
+                                MaterialPageRoute(builder: (context) => AddItemSplashScreen(
+                                  _image,_nameController.text, double.parse(_priceController.text))));
                               }
-                             
 
                             }
                           }

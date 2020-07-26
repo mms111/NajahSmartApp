@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:najah_smartapp/Entity/Customer.dart';
+import 'package:najah_smartapp/Presenter/CustomerPresenter.dart';
 
 class CustomerSettingScreen extends StatefulWidget {
   final Customer _customer;
   CustomerSettingScreen(this._customer);
+  
   
   @override
   _CustomerSettingScreenState createState() => _CustomerSettingScreenState();
@@ -12,9 +14,12 @@ class CustomerSettingScreen extends StatefulWidget {
 class _CustomerSettingScreenState extends State<CustomerSettingScreen> {
 
   bool _notifications = true;
-
+  CustomerPresenter customerPresenter = new CustomerPresenter();
+  
   @override
   Widget build(BuildContext context) {
+
+    customerPresenter.setCustomer(widget._customer);
 
     double _height = MediaQuery.of(context).size.height;
     double _width = MediaQuery.of(context).size.width;
@@ -39,7 +44,7 @@ class _CustomerSettingScreenState extends State<CustomerSettingScreen> {
                 child: Row(
                   children: <Widget>[
                     CircleAvatar(
-                      backgroundImage: widget._customer.profilePicture,
+                      backgroundImage: NetworkImage(widget._customer.photoUrl),
                       maxRadius: _height * 0.06,
                     ),
 
@@ -73,7 +78,7 @@ class _CustomerSettingScreenState extends State<CustomerSettingScreen> {
               ),
             ),
 
-            appListTile(context, Icons.account_circle, "Edit Profile", ""),
+            appListTile(context, Icons.account_circle, "Edit Profile", "/editProfileScreen"),
 
             Padding(
               padding: EdgeInsets.only(top: 12.0),
@@ -140,7 +145,32 @@ class _CustomerSettingScreenState extends State<CustomerSettingScreen> {
             ),
 
             appListTile(context, Icons.lock, "Logout", "/logoutSplashScreen"),
-
+            Padding(
+              padding: EdgeInsets.only(top: 12.0),
+              child: Container(
+                height: MediaQuery.of(context).size.height * 0.075,
+                color: Colors.blueGrey[800],
+                child: Center(
+                  child: ListTile(
+                    leading: Icon(
+                      Icons.delete,
+                      size: MediaQuery.of(context).size.height * 0.035,
+                      color: Colors.red,
+                    ),
+                    title: Text(
+                      "Delete Account",
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontSize: MediaQuery.of(context).size.height * 0.02,
+                      ),
+                    ),
+                    onTap: () {
+                      customerPresenter.deleteConfirmation(context);
+                    },
+                  ),
+                ),
+              ),
+            )
           ],
         ),
       ),
@@ -169,7 +199,16 @@ class _CustomerSettingScreenState extends State<CustomerSettingScreen> {
               ),
             ),
             onTap: () {
-              Navigator.pushReplacementNamed(_context, action);
+              if(action=='/editProfileScreen')
+              {
+               
+                customerPresenter.onRequest(context, action);
+              }
+              else
+              {
+                Navigator.pushReplacementNamed(_context, action);
+              }
+              
             },
           ),
         ),

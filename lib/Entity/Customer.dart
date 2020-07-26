@@ -1,60 +1,123 @@
-import 'User.dart';
-import 'package:flutter/material.dart';
-class Customer implements User {
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:najah_smartapp/Entity/User.dart';
 
-  String _email;
-  String _password;
-  String _name;
-  AssetImage _profilePic = AssetImage('assets/ProfilePictures/default.png');
-  String _phone;
-  double _credit = 0.0;
+class Customer implements User{
 
-  Customer(this._email, this._password, this._name, this._profilePic, this._phone, this._credit);
+  String id;
+  String email;
+  String name;
+  String photoUrl;
+  String phone;
+  double credit;
+  String type;
+
+  Customer({this.id, this.email, 
+            this.name, this.photoUrl, this.phone, 
+            this.credit, this.type});
+            
   Customer.customConstructor();
+
+  Customer.fromJson(Map<String, dynamic> json)
+    : this(
+        id: json['id'],
+        email: json['email'],
+        name: json['name'],
+        photoUrl : json['photoUrl'],
+        phone: json['phone'],
+        credit: json['credit'],
+        type: json['type']);
+
+  Map<String, dynamic> toJson() =>
+  {'id': id, 'email': email, 
+   'name': name, 'photoUrl' : photoUrl, 'phone': phone, 
+   'credit' : credit, 'type' : type};
+
+   void fromFirebase(DocumentSnapshot data)
+  {
+    this.id = data['id'];
+    this.email = data['email'];
+    this.name = data['name'];
+    this.photoUrl = data['photoUrl'];
+    this.phone = data['phone'];
+    this.credit = data['credit'];
+    this.type = data['type'];
+  }
+
+
+  @override
+  void setId(String id)
+  {
+    this.id = id;
+  }
 
   @override
   void setEmail(String email)
   {
-    _email = email;
-  }
-
-  @override
-  void setPass(String pass)
-  {
-    _password = pass;
+    this.email = email;
   }
 
   @override
   void setName(String name)
   {
-    _name = name;
+    this.name = name;
   }
 
   @override
-  void setProfilePic(AssetImage image)
+  void setPhotoUrl(String photoUrl)
   {
-    _profilePic = image;
+    this.photoUrl = photoUrl;
   }
-  
+
+  @override
+  void setType(String type)
+  {
+    this.type= type;
+  }
+
   void setPhone(String phone)
   {
-    _phone = phone;
+    this.phone = phone;
   }
-
-  void setCredit(double crediit)
+  
+  void setCredit(double credit)
   {
-    _credit = crediit;
+    this.credit = credit;
   }
 
-  @override
-  get email => _email;
-  @override
-  get password => _password;
-  @override
-  get name => _name;
-  @override
-  get profilePicture => _profilePic;
-  get phone => _phone;
-  get credit => _credit;
+  String getId()
+  {
+    return id;
+  }
+
+  String getEmail()
+  {
+    return email;
+  }
+
+  String getName()
+  {
+    return name;
+  }
+
+  String getPhotoUrl()
+  {
+    return photoUrl;
+  }
+
+  String getPhone()
+  {
+    return phone;
+  }
+
+  double getCredit()
+  {
+    return credit;
+  }
+
+
+  String getType()
+  {
+    return type;
+  }
 
 }

@@ -1,31 +1,33 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:najah_smartapp/Entity/Admin.dart';
 import 'package:najah_smartapp/Entity/Customer.dart';
-import 'package:najah_smartapp/Entity/Package.dart';
-import 'package:najah_smartapp/Model/AdminDao.dart';
+import 'package:najah_smartapp/Entity/Item.dart';
+import 'package:najah_smartapp/Entity/TopUp.dart';
 import 'package:najah_smartapp/Model/CustomerDao.dart';
-import 'package:najah_smartapp/Model/PackageDao.dart';
+import 'package:najah_smartapp/Model/ItemDao.dart';
 import 'package:najah_smartapp/Model/TopUpDao.dart';
-import 'package:najah_smartapp/View/Admin/AddPackageScreen.dart';
-import 'package:najah_smartapp/View/Admin/AddUserScreen.dart';
+import 'package:najah_smartapp/Model/UserDao.dart';
 import 'package:najah_smartapp/View/Admin/AdminAppBottomNavigationBar.dart';
 import 'package:najah_smartapp/View/Admin/FinancialReportScreen.dart';
-import 'package:najah_smartapp/View/Admin/ManagePackagesScreen.dart';
-import 'package:najah_smartapp/View/Admin/ManageUsersScreen.dart';
-import 'package:najah_smartapp/View/Admin/PackagesListScreen.dart';
-import 'package:najah_smartapp/View/Admin/SelectFinancialReportScreen.dart';
+import 'package:najah_smartapp/View/Admin/ItemsList.dart';
 import 'package:najah_smartapp/View/Admin/TopUpScreen.dart';
 import 'package:najah_smartapp/View/Admin/UsersListScreen.dart';
 import 'package:najah_smartapp/CustomWidgets/AlertDialogBox.dart';
 import 'package:najah_smartapp/View/Customer/CustomerProfileScreen.dart';
+import 'package:najah_smartapp/View/Admin/ManageShopScreen.dart';
+import 'package:najah_smartapp/View/Admin/AddItemScreen.dart';
+import 'package:najah_smartapp/View/Admin/ItemScreen.dart';
 
 class AdminPresenter{
 
   Admin _admin;
-  AdminDao adminDao = new AdminDao();
   TopUpDao topUpDao = new TopUpDao();
   CustomerDao customerDao = new CustomerDao();
-  PackageDao packageDao = new PackageDao();
+  Item item = new Item();
+  ItemDao itemDao = new ItemDao();
 
   void setAdmin(Admin admin)
   {
@@ -42,16 +44,6 @@ class AdminPresenter{
           (Route<dynamic> route) => false,
         );
         break;
-      case '/manageUsers' :
-        Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => ManageUsersScreen())
-        );
-        break;
-      case '/addUser' :
-        Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => AddUserScreen())
-        );
-        break;
       case '/usersList' :
         showUsersList(context);
         break;
@@ -60,75 +52,45 @@ class AdminPresenter{
           MaterialPageRoute(builder: (context) => TopUpScreen())
         );
         break;
-      case '/selectFinancialReport' :
-        Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => SelectFinancialReportScreen())
-        );
-        break;
       case '/financialReport' :
-        Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => FinancialReportScreen())
-        );
-        break;
-      case '/managePackages' :
-        Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => ManagePackagesScreen())
-        );
-        break;
-      case '/addPackage' :
-        Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => AddPackageScreen())
-        );
-        break;
-      case '/packagesList' :
-        showpackagesList(context);
+        topUpList(context);
         break;
       case '/logoutSplashScreen' :
         Navigator.of(context).pushReplacementNamed(screen);
         break;
+      case '/manageShop' :
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => ManageShopScreen())
+        );
+        break;
+      case '/addItem' :
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => AddItemScreen())
+        );
+        break;
+      case '/itemsList' :
+        itemList(context);
+      break;
       
     }
   }
 
-  addUser(BuildContext context, String name, String email, String password, String phone)
+  
+  Future showUsersList(BuildContext context) async
   {
-    bool userExists = false;
-    
-
-    if(adminDao.findAdmin(email))
+    var users = await customerDao.customerList();
+    if(users.runtimeType==String)
     {
-      userExists = true;
+     
+      return AlertDialogBox(context, "Sorry!", users);
     }
-
-    if(customerDao.findCustomer(email))
-    {
-      userExists = true;
-    }
-
-    if(userExists)
-    {
-      return AlertDialogBox(context, "Error!", "User already exists.");
-    }
-
     else
     {
-      Customer customer = Customer.customConstructor();
-      customer.setName(name);
-      customer.setEmail(email);
-      customer.setPass(password);
-      customer.setPhone(phone);
-      customerDao.addCustomer(customer);
-      Navigator.of(context).pop();
-      return AlertDialogBox(context, "Successfully Added!", customer.name + "'s account has been created successfully.");
+      Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => UsersListScreen(users)));
     }
+    
    
-  }
-
-  showUsersList(BuildContext context)
-  {
-    List<Customer> customerList = customerDao.customerList();
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => UsersListScreen(customerList)));
   }
 
   showUserProfile(BuildContext context, Customer customer)
@@ -138,51 +100,26 @@ class AdminPresenter{
     );
   }
   
-  deleteUser(BuildContext context, Customer customer)
-  {
-    return showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => AlertDialog(
-        title: Text("Are you sure?"),
-        content: Text("You really want to delete " + customer.name + "'s account?"),
-        actions: <Widget>[
-          FlatButton(
-            child: Text('Yes'),
-            onPressed: () {
-              customerDao.deleteCustomer(customer);
-              Navigator.of(context).pop();
-              List<Customer> customersList = customerDao.customerList(); 
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => UsersListScreen(customersList))
-              );
-            },
-            color: Colors.red,
-          ),
-          FlatButton(
-            child: Text('No'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            color: Colors.green,
-          )
-        ],
-        backgroundColor: Colors.blueGrey[50],
-      )
-    );
-  }
+ 
 
-  topUp(BuildContext context, String email, double amount)
+  Future topUp(BuildContext context, String email, double amount) async
   {
-    Customer customer = customerDao.getCustomer(email);
-    if(customer==null)
+    var result = await UserDao().getUserByEmail(email);
+
+    if(result.runtimeType==String)
     {
-      return AlertDialogBox(context, "Error!", "User not found.");
+      return AlertDialogBox(context, "Error!", result);
     }
     else
     {
-      topUpDao.updateUserAmount(customer, amount);
-       Navigator.of(context).pushReplacement(
+      var user = result.documents.first;
+      Customer customer = new Customer();
+      customer.fromFirebase(user);
+      await customerDao.updateCustomerAmount(customer, amount);
+      TopUp topUp = new TopUp(Timestamp.now(), customer.id, customer.name, amount);
+      await topUpDao.addTopUp(topUp);
+      customer.setCredit(customer.credit+amount);
+      Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => TopUpScreen())
       );
       return AlertDialogBox(
@@ -190,57 +127,112 @@ class AdminPresenter{
         "Top-up Successful.", 
         "RM" +amount.toString() +"0 has been successfully added to " + customer.name + "'s account."
       );
+
     }
+
   }
 
-  addPackage(BuildContext context, String title, String validity, double price)
+  Future topUpList(BuildContext context) async
   {
-    if(packageDao.findPackage(title))
+    var topups = await topUpDao.topUpList();
+    if(topups.runtimeType==String)
     {
-      return AlertDialogBox(
-        context, 
-        "Error!", 
-        title + " already exits."
-      );
+      return AlertDialogBox(context, "Sorry!", topups);
     }
     else
     {
-      Package package = Package.customConstructor();
-      package.setTitle(title.toUpperCase());
-      package.setValidity(validity);
-      package.setPrice(price);
-      packageDao.addPackage(package);
-      Navigator.of(context).pop();
-      return AlertDialogBox(context, "Successfully Added!", package.title+ " has been added successfully");
-
+      Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => FinancialReportScreen(topups)));
     }
   }
 
-  showpackagesList(BuildContext context)
+  Future addItem(BuildContext context, File image, String name, double price) async
   {
-    List<Package> packagesList = packageDao.packageList();
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => PackagesListScreen(packagesList)));
+    var result = await itemDao.uploadImage(image);
+    if(result.runtimeType==String)
+    {
+      String url = result;
+      item.setName(name);
+      item.setPrice(price);
+      item.setPhotoUrl(url);
+      var addItem = await itemDao.addItem(item);
+      if(addItem.runtimeType==String)
+      {
+        Navigator.of(context).pop();
+        return AlertDialogBox(context, "Error!", addItem.message);
+      }
+      else
+      {
+        Navigator.of(context).pop();
+        Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => AddItemScreen()));
+        return AlertDialogBox(context, "Added!", "Your item has been added successfully.");
+       
+      }
+
+    }
+    else
+    {
+       Navigator.of(context).pop();
+       return AlertDialogBox(context, "Error!", result.message);
+    }
   }
 
-  deletPackage(BuildContext context, Package package)
+
+
+  Future itemList(BuildContext context) async
   {
+    var items = await itemDao.itemList();
+    if(items.runtimeType==String)
+    {
+      return AlertDialogBox(context, "Sorry!", items);
+    }
+    else
+    {
+      Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => ItemListScreen(items)));
+    }
+  }
+
+
+  showItem(BuildContext context, Item item)
+  {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => ItemScreen(item))
+    );
+  }
+
+  deleteItem(BuildContext context, Item item)
+  {
+    
     return showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
         title: Text("Are you sure?"),
-        content: Text("You really want to delete " + package.title),
+        content: Text("You really want to delete this item?"),
         actions: <Widget>[
           FlatButton(
             child: Text('Yes'),
-            onPressed: () {
-              packageDao.deletePackage(package);
-              Navigator.of(context).pop();
-              List<Package> packagesList = packageDao.packageList(); 
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => PackagesListScreen(packagesList))
-              );
+            onPressed: () async {
+              await itemDao.deleteItem(item);
+              var items = await itemDao.itemList();
+              if(items.runtimeType==String)
+              {
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+                List<Item> itemslist = new List<Item>();
+                Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => ItemListScreen(itemslist)));
+              }
+              else
+              {
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+                Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => ItemListScreen(items)));
+              }
+              return AlertDialogBox(context, "Deleted!", "Item has been deleted successfully.");
             },
             color: Colors.red,
           ),
@@ -255,6 +247,7 @@ class AdminPresenter{
         backgroundColor: Colors.blueGrey[50],
       )
     );
+    
   }
 
 

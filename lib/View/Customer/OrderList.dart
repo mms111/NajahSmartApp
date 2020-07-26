@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:najah_smartapp/Entity/TopUp.dart';
+import 'package:najah_smartapp/Entity/Order.dart';
 
-class FinancialReportScreen extends StatelessWidget {
+class OrderListScreen extends StatelessWidget {
 
-  final List<TopUp> _topUpList;
-  FinancialReportScreen(this._topUpList);
+  final List<Order> _orderList;
+  OrderListScreen(this._orderList);
 
   @override
   Widget build(BuildContext context) {
@@ -14,13 +14,13 @@ class FinancialReportScreen extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Colors.green,
           title: Text(
-            "Financial Report"
+            "Top-up List"
           ),
           centerTitle: true,
         ),
         body: Container(
           child: ListView(
-            children: _topUpList.map((topUp)=>topUpRow(context,topUp)).toList()
+            children: _orderList.map((order)=>orderRow(context,order)).toList()
           ),
         ),
       ),
@@ -29,7 +29,7 @@ class FinancialReportScreen extends StatelessWidget {
     
   }
 
-  Widget topUpRow(BuildContext context, TopUp topUp)
+  Widget orderRow(BuildContext context, Order order)
   {
     return Padding(
       padding: const EdgeInsets.only(top: 25.0),
@@ -43,7 +43,7 @@ class FinancialReportScreen extends StatelessWidget {
             Expanded(
               flex: 1,
               child: Text(
-                (_topUpList.indexOf(topUp)+1).toString(),
+                (_orderList.indexOf(order)+1).toString(),
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 15.0,
@@ -54,9 +54,9 @@ class FinancialReportScreen extends StatelessWidget {
             Expanded(
               flex: 4,
               child: Text(
-                topUp.getDate().toDate().day.toString() + '/' + 
-                topUp.getDate().toDate().month.toString() + '/' +
-                topUp.getDate().toDate().year.toString(),
+                order.date.toDate().day.toString() + '/' + 
+                order.date.toDate().month.toString() + '/' +
+                order.date.toDate().year.toString(),
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 15.0,
@@ -67,7 +67,7 @@ class FinancialReportScreen extends StatelessWidget {
             Expanded(
               flex: 5,
               child: Text(
-                topUp.getCustomerName(),
+                order.itemName,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 15.0,
@@ -78,7 +78,7 @@ class FinancialReportScreen extends StatelessWidget {
              Expanded(
               flex: 3,
               child: Text(
-                "RM"+topUp.getAmount().toString() + "0",
+                "RM"+order.itemPrice.toString() + "0",
                 style: TextStyle(
                   color: Colors.green,
                   fontSize: 15.0,

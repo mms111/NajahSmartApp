@@ -1,19 +1,39 @@
-import 'package:najah_smartapp/Entity/Customer.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TopUp{
 
-  Customer _customer;
-  DateTime _date;
+  Timestamp _date;
+  String _customerName;
+  String _customerId;
   double _amount;
 
-  TopUp(this._customer, this._date, this._amount);
+  TopUp(this._date, this._customerId, this._customerName, this._amount);
 
-  void setCustomer(Customer customer)
+  TopUp.customConstructor();
+
+  Map<String, dynamic> toJson() =>
+  {'date' : _date, 'customerId': _customerId, 'customerName': _customerName, 'amount' : _amount};
+
+   void fromFirebase(DocumentSnapshot data)
   {
-    _customer = customer;
+    this._date = data['date'];
+    this._customerId = data['customerId'];
+    this._customerName = data['customerName'];
+    this._amount = data['amount'];
   }
 
-  void setDate(DateTime date)
+
+  void setCustomerName(String customer)
+  {
+    _customerName = customer;
+  }
+
+  void setCustomerId(String id)
+  {
+    _customerId = id;
+  }
+
+  void setDate(Timestamp date)
   {
     _date = date;
   }
@@ -23,17 +43,25 @@ class TopUp{
     _amount = amount;
   }
 
-  Customer getCustomer()
-  {
-    return _customer;
-  }
-  
-
-  DateTime getDate()
+  Timestamp getDate()
   {
     return _date;
   }
 
-  get amount => _amount;
+  String getCustomerName()
+  {
+    return _customerName;
+  }
+
+  String getCustomerId()
+  {
+    return _customerId;
+  }
+
+  double getAmount()
+  {
+    return _amount;
+  }
+  
 
 }

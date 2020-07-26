@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:najah_smartapp/Entity/Customer.dart';
 import 'package:najah_smartapp/CustomWidgets/DashboardItem.dart';
+import 'package:najah_smartapp/Presenter/CustomerPresenter.dart';
 
 class CustomerDashboardScreen extends StatelessWidget {
   final Customer _customer;
@@ -11,6 +12,8 @@ class CustomerDashboardScreen extends StatelessWidget {
 
     double _height = MediaQuery.of(context).size.height;
     double _width = MediaQuery.of(context).size.width;
+    CustomerPresenter customerPresenter = new CustomerPresenter();
+    customerPresenter.setCustomer(_customer);
 
     return SafeArea(
       child: Scaffold(
@@ -33,7 +36,7 @@ class CustomerDashboardScreen extends StatelessWidget {
                   child: Row(
                     children: <Widget>[
                       CircleAvatar(
-                        backgroundImage: _customer.profilePicture,
+                        backgroundImage: NetworkImage(_customer.photoUrl),
                         maxRadius: _height * 0.045,
                       ),
 
@@ -82,25 +85,9 @@ class CustomerDashboardScreen extends StatelessWidget {
                             margin: EdgeInsets.all(15.0),
                             color: Colors.blueGrey[800],
                             child: InkWell(
-                              onTap: () {},
-                              child: DashboardItem(Icons.camera_alt, "Attendance")
-                            ),
-                          ),
-                          Card(
-                            elevation: 5.0,
-                            margin: EdgeInsets.all(15.0),
-                            color: Colors.blueGrey[800],
-                            child: InkWell(
-                              onTap: () {},
-                              child: DashboardItem(Icons.account_circle, "Edit Profile")
-                            ),
-                          ),
-                          Card(
-                            elevation: 5.0,
-                            margin: EdgeInsets.all(15.0),
-                            color: Colors.blueGrey[800],
-                            child: InkWell(
-                              onTap: () {},
+                              onTap: () {
+                                customerPresenter.itemList(context);
+                              },
                               child: DashboardItem(Icons.shopping_cart, "Shop")
                             ),
                           ),
@@ -109,8 +96,32 @@ class CustomerDashboardScreen extends StatelessWidget {
                             margin: EdgeInsets.all(15.0),
                             color: Colors.blueGrey[800],
                             child: InkWell(
-                              onTap: () {},
-                              child: DashboardItem(Icons.card_membership, "Membership")
+                              onTap: () {
+                                 customerPresenter.onRequest(context, '/topUpScreen');
+                              },
+                              child: DashboardItem(Icons.attach_money, "Top-up")
+                            ),
+                          ),
+                          Card(
+                            elevation: 5.0,
+                            margin: EdgeInsets.all(15.0),
+                            color: Colors.blueGrey[800],
+                            child: InkWell(
+                              onTap: () {
+                                customerPresenter.onRequest(context, '/activitiesScreen');
+                              },
+                              child: DashboardItem(Icons.local_activity, "Activities")
+                            ),
+                          ),
+                          Card(
+                            elevation: 5.0,
+                            margin: EdgeInsets.all(15.0),
+                            color: Colors.blueGrey[800],
+                            child: InkWell(
+                              onTap: () {
+                                customerPresenter.onRequest(context, "/editProfileScreen");
+                              },
+                              child: DashboardItem(Icons.account_circle, "Edit Profile")
                             ),
                           ),
                         ]

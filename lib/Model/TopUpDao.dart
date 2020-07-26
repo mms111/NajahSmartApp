@@ -1,20 +1,75 @@
-import 'package:najah_smartapp/Entity/Customer.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:najah_smartapp/Entity/TopUp.dart';
-import 'MockData.dart';
 
 class TopUpDao {
   
-  void updateUserAmount(Customer customer, double amount)
+  
+  Future addTopUp(TopUp topup) async
   {
-     for(int i=0; i<customersList.length; i++)
-    {
-      if(customersList[i].email == customer.email)
-      {
-        customersList[i].setCredit((customer.credit+amount));
-        TopUp topUp = new TopUp(customer, DateTime.now(), amount);
-        topUpList.add(topUp);
-      }
-       
-    }
+     
+      Firestore.instance.collection("topup").document().setData(topup.toJson());
+
   }
+
+  Future topUpList() async
+  {
+    final CollectionReference _usersCollectionReference =
+      Firestore.instance.collection("topup");
+
+    var result = await _usersCollectionReference.getDocuments();
+    var isEmpty = result.documents.isEmpty;
+    if(isEmpty)
+    {
+      return "Currently dont have any topups.";
+    }
+    else
+    {
+      var topups = result;
+      List<TopUp> topupsList = new List<TopUp>();
+      for(int i=0; i<topups.documents.length; i++)
+      {
+        TopUp topup = new TopUp.customConstructor();
+        topup.fromFirebase(topups.documents[i]);
+        
+        topupsList.add(topup);
+
+      }
+      return topupsList;
+    }
+    
+      
+  }
+
+   Future customerTopUpList(String id) async
+  {
+    final CollectionReference _usersCollectionReference =
+      Firestore.instance.collection("topup");
+
+    var result = await _usersCollectionReference.where('customerId', isEqualTo: id).getDocuments();
+    var isEmpty = result.documents.isEmpty;
+    if(isEmpty)
+    {
+      return "Currently you dont have any topups.";
+    }
+    else
+    {
+      var topups = result;
+      List<TopUp> topupsList = new List<TopUp>();
+      for(int i=0; i<topups.documents.length; i++)
+      {
+        TopUp topup = new TopUp.customConstructor();
+        topup.fromFirebase(topups.documents[i]);
+        
+        topupsList.add(topup);
+
+      }
+      return topupsList;
+    }
+    
+      
+  }
+
+   
+
+  
 }

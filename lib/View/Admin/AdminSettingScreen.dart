@@ -39,7 +39,7 @@ class _AdminSettingScreenState extends State<AdminSettingScreen> {
                 child: Row(
                   children: <Widget>[
                     CircleAvatar(
-                      backgroundImage: widget._admin.profilePicture,
+                      backgroundImage: NetworkImage(widget._admin.photoUrl),
                       maxRadius: _height * 0.06,
                     ),
 
@@ -73,7 +73,7 @@ class _AdminSettingScreenState extends State<AdminSettingScreen> {
               ),
             ),
 
-            AdminListTile(context, Icons.account_circle, "Edit Profile", ""),
+          
 
             Padding(
               padding: EdgeInsets.only(top: 12.0),

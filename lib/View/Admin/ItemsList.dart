@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:najah_smartapp/Entity/Customer.dart';
+import 'package:najah_smartapp/Entity/Item.dart';
 import 'package:najah_smartapp/Presenter/AdminPresenter.dart';
 
-class UsersListScreen extends StatelessWidget {
-  final List<Customer> _customersList;
-  UsersListScreen(this._customersList);
+class ItemListScreen extends StatelessWidget {
+  final List<Item> _itemsList;
+  ItemListScreen(this._itemsList);
   
 
   @override
@@ -17,13 +17,13 @@ class UsersListScreen extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Colors.green,
           title: Text(
-            "Users List"
+            "Items List"
           ),
           centerTitle: true,
         ),
         body: Container(
           child: ListView(
-            children: _customersList.map((customer)=>userRow(context,customer)).toList()
+            children: _itemsList.map((item)=>itemRow(context,item)).toList()
           )
         ),
       ),
@@ -31,7 +31,7 @@ class UsersListScreen extends StatelessWidget {
   }
 
 
-  Widget userRow(BuildContext _context, Customer customer)
+  Widget itemRow(BuildContext _context, Item item)
   {
     return Padding(
       padding: EdgeInsets.only(top: 12.0),
@@ -45,13 +45,13 @@ class UsersListScreen extends StatelessWidget {
                   width: MediaQuery.of(_context).size.height * 0.06,
                   height: MediaQuery.of(_context).size.height * 0.06,
                   child: Image.network(
-                    customer.photoUrl,
+                    item.photoUrl,
                     fit: BoxFit.fill,
                   ),
                 ),
               ),
             title: Text(
-                  customer.name,
+                  item.name,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 20.0,
@@ -59,7 +59,7 @@ class UsersListScreen extends StatelessWidget {
                   ),
                 ),
             onTap: (){
-              AdminPresenter().showUserProfile(_context, customer);
+               AdminPresenter().showItem(_context, item);
             },
             
           ),

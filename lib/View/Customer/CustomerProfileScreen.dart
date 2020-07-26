@@ -42,7 +42,7 @@ class CustomerProfileScreen extends StatelessWidget {
                         backgroundColor: Colors.blueGrey[900],
                         maxRadius: _height * 0.075,
                         child: CircleAvatar(
-                          backgroundImage: _customer.profilePicture,
+                         backgroundImage: NetworkImage(_customer.photoUrl),
                           maxRadius: _height * 0.07,
                         ),
                       ),
@@ -75,8 +75,6 @@ class CustomerProfileScreen extends StatelessWidget {
                   children: <Widget>[
 
                     listView(_context, Icons.monetization_on, "Credit: RM" + _customer.credit.toString() + "0"),
-                    listView(_context, Icons.person_pin_circle, "Status: Active"),
-                    listView(_context, Icons.card_membership, "Exp: 20/05/2020"),
                     listView(_context, Icons.email, _customer.email),
                     listView(_context, Icons.phone, _customer.phone),
                   ],

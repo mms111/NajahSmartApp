@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:najah_smartapp/Entity/Package.dart';
-import 'package:najah_smartapp/Presenter/AdminPresenter.dart';
+import 'package:najah_smartapp/Entity/TopUp.dart';
 
-class PackagesListScreen extends StatelessWidget {
-  final List<Package> _packagesList;
-  PackagesListScreen(this._packagesList);
+class TopUpListScreen extends StatelessWidget {
+
+  final List<TopUp> _topUpList;
+  TopUpListScreen(this._topUpList);
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -13,20 +14,22 @@ class PackagesListScreen extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Colors.green,
           title: Text(
-            "Packages List"
+            "Top-up List"
           ),
           centerTitle: true,
         ),
         body: Container(
           child: ListView(
-            children: _packagesList.map((package)=>userRow(context,package)).toList()
-          )
+            children: _topUpList.map((topUp)=>topUpRow(context,topUp)).toList()
+          ),
         ),
       ),
+    
     );
+    
   }
 
-  Widget userRow(BuildContext context, Package package)
+  Widget topUpRow(BuildContext context, TopUp topUp)
   {
     return Padding(
       padding: const EdgeInsets.only(top: 25.0),
@@ -40,7 +43,7 @@ class PackagesListScreen extends StatelessWidget {
             Expanded(
               flex: 1,
               child: Text(
-                (_packagesList.indexOf(package)+1).toString(),
+                (_topUpList.indexOf(topUp)+1).toString(),
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 15.0,
@@ -49,9 +52,11 @@ class PackagesListScreen extends StatelessWidget {
               ),
             ),
             Expanded(
-              flex: 6,
+              flex: 4,
               child: Text(
-                package.title,
+                topUp.getDate().toDate().day.toString() + '/' + 
+                topUp.getDate().toDate().month.toString() + '/' +
+                topUp.getDate().toDate().year.toString(),
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 15.0,
@@ -60,9 +65,9 @@ class PackagesListScreen extends StatelessWidget {
               ),
             ),
             Expanded(
-              flex: 3,
+              flex: 5,
               child: Text(
-                package.validity,
+                topUp.getCustomerName(),
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 15.0,
@@ -70,32 +75,15 @@ class PackagesListScreen extends StatelessWidget {
                 ),
               ),
             ),
-            Expanded(
+             Expanded(
               flex: 3,
               child: Text(
-                "RM" + package.price.toString() + "0",
+                "RM"+topUp.getAmount().toString() + "0",
                 style: TextStyle(
                   color: Colors.green,
                   fontSize: 15.0,
                   fontWeight: FontWeight.bold,
                   decoration: TextDecoration.underline
-                ),
-              ),
-            ),
-             Expanded(
-              flex: 2,
-              child: InkWell(
-                onTap: () {
-                  AdminPresenter().deletPackage(context, package);
-                },
-                child: Text(
-                  "Delete",
-                  style: TextStyle(
-                    color: Colors.red,
-                    fontSize: 15.0,
-                    fontWeight: FontWeight.bold,
-                    decoration: TextDecoration.underline
-                  ),
                 ),
               ),
             )
@@ -104,4 +92,5 @@ class PackagesListScreen extends StatelessWidget {
       ),
     );
   }
+  
 }

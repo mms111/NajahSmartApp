@@ -34,7 +34,7 @@ class AdminDashboardScreen extends StatelessWidget {
                   child: Row(
                     children: <Widget>[
                       CircleAvatar(
-                        backgroundImage: _admin.profilePicture,
+                        backgroundImage: NetworkImage(_admin.photoUrl),
                         maxRadius: _height * 0.045,
                       ),
 
@@ -69,8 +69,10 @@ class AdminDashboardScreen extends StatelessWidget {
                             margin: EdgeInsets.all(15.0),
                             color: Colors.blueGrey[800],
                             child: InkWell(
-                              onTap: () {},
-                              child: DashboardItem(Icons.people, "Manage Attendance")
+                              onTap: () {
+                                AdminPresenter().onRequest(context, '/manageShop');
+                              },
+                              child: DashboardItem(Icons.shopping_cart, "Manage Shop")
                             ),
                           ),
                           Card(
@@ -79,20 +81,24 @@ class AdminDashboardScreen extends StatelessWidget {
                             color: Colors.blueGrey[800],
                             child: InkWell(
                               onTap: () {
-                                AdminPresenter().onRequest(context, '/manageUsers');
+                                AdminPresenter().onRequest(context, '/usersList');
                               },
-                              child: DashboardItem(Icons.account_circle, "Manage Users")
+                              child: DashboardItem(Icons.account_circle, "Users")
                             ),
                           ),
+
                           Card(
                             elevation: 5.0,
                             margin: EdgeInsets.all(15.0),
                             color: Colors.blueGrey[800],
                             child: InkWell(
-                              onTap: () {},
-                              child: DashboardItem(Icons.shopping_cart, "Manage Shop")
+                              onTap: () {
+                                AdminPresenter().onRequest(context, '/financialReport');
+                              },
+                              child: DashboardItem(Icons.description, "Financial Report")
                             ),
                           ),
+                         
                           Card(
                             elevation: 5.0,
                             margin: EdgeInsets.all(15.0),
@@ -104,28 +110,7 @@ class AdminDashboardScreen extends StatelessWidget {
                               child: DashboardItem(Icons.attach_money, "Top-up")
                             ),
                           ),
-                          Card(
-                            elevation: 5.0,
-                            margin: EdgeInsets.all(15.0),
-                            color: Colors.blueGrey[800],
-                            child: InkWell(
-                              onTap: () {
-                                AdminPresenter().onRequest(context, '/selectFinancialReport');
-                              },
-                              child: DashboardItem(Icons.description, "Financial Report")
-                            ),
-                          ),
-                          Card(
-                            elevation: 5.0,
-                            margin: EdgeInsets.all(15.0),
-                            color: Colors.blueGrey[800],
-                            child: InkWell(
-                              onTap: () {
-                                AdminPresenter().onRequest(context, '/managePackages');
-                              },
-                              child: DashboardItem(Icons.card_membership, "Manage Packages")
-                            ),
-                          ),
+                          
                         ]
                       ),
                     )

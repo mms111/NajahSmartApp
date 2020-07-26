@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:najah_smartapp/CustomWidgets/AppLogo.dart';
+import 'package:najah_smartapp/Presenter/LoginPresenter.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -14,7 +15,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     new Future.delayed(
         const Duration(seconds: 3),
-        () => Navigator.of(context).pushReplacementNamed('/home'));
+        () => LoginPresenter().isUserLoggedIn(context));
   }
 
   @override

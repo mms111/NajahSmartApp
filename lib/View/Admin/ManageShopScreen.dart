@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:najah_smartapp/CustomWidgets/AdminListTile.dart';
 
-class ManageUsersScreen extends StatelessWidget {
+class ManageShopScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -9,20 +9,16 @@ class ManageUsersScreen extends StatelessWidget {
         backgroundColor: Colors.blueGrey[900],
         appBar: AppBar(
           backgroundColor: Colors.green,
-          title: Text(
-            "Manage Users",
-          ),
+          title: Text("Manage Shop"),
           centerTitle: true,
         ),
         body: ListView(
           children: <Widget>[
-            AdminListTile(context, Icons.add , "Add User", "/addUser" ),
-            AdminListTile(context, Icons.view_list , "Users List", "/usersList" )
+            AdminListTile(context, Icons.add , "Add Item", "/addItem" ),
+            AdminListTile(context, Icons.view_list , "Items List", "/itemsList" )
           ],
-        ),
+        )
       ),
     );
   }
-
-  
 }

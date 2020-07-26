@@ -1,19 +1,14 @@
-import 'package:flutter/material.dart';
 
 class User{
 
-  void setEmail(String email) {}
+  void setId(String id) {}
 
-  void setPass(String pass) {}
+  void setEmail(String email) {}
 
   void setName(String name) {}
 
-  void setProfilePic(AssetImage image) {}
+  void setPhotoUrl(String photoUrl) {}
 
-  get email {}
-  get password {}
-  get name {}
-  get profilePicture {}
-  
+  void setType(String type) {}
 
 }

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:najah_smartapp/CustomWidgets/InputTextField.dart';
-import 'package:najah_smartapp/Presenter/AdminPresenter.dart';
+import 'package:najah_smartapp/View/SignUpSplashScreen.dart';
 
-class AddUserScreen extends StatefulWidget {
+class SignUpScreen extends StatefulWidget {
   @override
-  _AddUserScreenState createState() => _AddUserScreenState();
+  _SignUpScreenState createState() => _SignUpScreenState();
 }
 
-class _AddUserScreenState extends State<AddUserScreen> {
+class _SignUpScreenState extends State<SignUpScreen> {
 
   final _addUserFormKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
@@ -26,7 +26,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
         appBar: AppBar(
           backgroundColor: Colors.green,
           title: Text(
-            "Add User"
+            "Sign Up"
           ),
           centerTitle: true,
         ),
@@ -92,7 +92,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
                         height: _height * 0.06,
                         child: RaisedButton(
                           child: Text(
-                            "Add User",
+                            "Sign Up",
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: _height * 0.02,
@@ -106,13 +106,16 @@ class _AddUserScreenState extends State<AddUserScreen> {
                           onPressed: () {
                             if(_addUserFormKey.currentState.validate())
                             {
-                              AdminPresenter().addUser(
-                                context, 
-                                _nameController.text, 
-                                _emailController.text,
-                                _passwordController.text, 
-                                _phoneController.text
+                              
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => SignUpSplashScreen(
+                                    _nameController.text, _emailController.text, 
+                                    _passwordController.text, _phoneController.text
+                                  )
+                                )
                               );
+
                             }
                           }
                         ),

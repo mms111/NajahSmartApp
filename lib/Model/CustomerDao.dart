@@ -1,71 +1,120 @@
-import 'package:najah_smartapp/Model/MockData.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:najah_smartapp/Entity/Customer.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:io';
 
 class CustomerDao{
 
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
+  Future uploadImage(File image) async
+  {
+    try
+    {
+      String fileName = image.path;
+      StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child(fileName);
+      StorageUploadTask uploadTask = firebaseStorageRef.putFile(image);
+      await uploadTask.onComplete;
+      var url = await firebaseStorageRef.getDownloadURL() as String;
+      return url;
+    } catch(e)
+    {
+      return e;
+    }
+  }
+
+  Future updatePhotoUrl(String id, String url) async
+  {
+    final CollectionReference _usersCollectionReference =
+      Firestore.instance.collection("users");
+    try
+    {
+       var result = await _usersCollectionReference.document(id).updateData({'photoUrl' : url});
+       return result;
+    } catch(e)
+    {
+      return e.message;
+    }
+  }
+
+  Future updateUserDetails(String id, String name, String phone) async
+  {
+    final CollectionReference _usersCollectionReference =
+      Firestore.instance.collection("users");
+    try
+    {
+       var result = await _usersCollectionReference.document(id).updateData({'name' : name,
+       'phone' : phone});
+       return result;
+    } catch(e)
+    {
+      return e.message;
+    }
+  }
+
   
-  bool validateCustomer(Customer customer)
+
+  Future customerList() async
   {
-    for(int i=0; i<customersList.length; i++)
-    {
-      if(customersList[i].email == customer.email && customersList[i].password == customer.password)
-      {
-        customer.setName(customersList[i].name);
-        customer.setProfilePic(customersList[i].profilePicture);
-        customer.setPhone(customersList[i].phone);
-        customer.setCredit(customersList[i].credit);
-        return true;
-      }
-       
-    }
+    final CollectionReference _usersCollectionReference =
+      Firestore.instance.collection("users");
+
+    var result = await _usersCollectionReference.getDocuments();
     
-    return false;
-  }
-
-  bool findCustomer(String email)
-  {
-    for(int i=0; i<customersList.length; i++)
-    {
-      if(customersList[i].email==email)
+   
+      var users = result;
+      List<Customer> customersList = new List<Customer>();
+      for(int i=0; i<users.documents.length; i++)
       {
-        return true;
+        Customer customer = new Customer();
+        customer.fromFirebase(users.documents[i]);
+        if(customer.type=='customer')
+        {
+          customersList.add(customer);
+        }
+
       }
-    }
-    return false;
-  }
 
-  void addCustomer(Customer customer)
-  {
-    customersList.add(customer);
-  }
-
-  List<Customer> customerList()
-  {
-    return customersList;
-  }
-
-  void deleteCustomer(Customer customer)
-  {
-    customersList.remove(customer);
-  }
-
-  Customer getCustomer(String email)
-  {
-    for(int i=0; i<customersList.length; i++)
-    {
-      if(customersList[i].email == email)
+      if(customersList.isEmpty)
       {
-        Customer customer = Customer.customConstructor();
-        customer.setEmail(customersList[i].email);
-        customer.setName(customersList[i].name);
-        customer.setProfilePic(customersList[i].profilePicture);
-        customer.setPhone(customersList[i].phone);
-        customer.setCredit(customersList[i].credit);
-        return customer;
+        return "Currently dont have any user.";
       }
-       
-    }
-
-    return null;
+      else
+      {
+        return customersList;
+      }
+    
+      
   }
+
+   Future deleteUser(Customer customer) async
+  { 
+   
+      FirebaseUser user = await _firebaseAuth.currentUser();
+      user.delete();
+      _firebaseAuth.signOut();
+      
+      final CollectionReference _usersCollectionReference =
+        Firestore.instance.collection("users");
+      
+      await _usersCollectionReference.document(customer.id).delete();      
+    
+  }
+
+  Future updateCustomerAmount(Customer customer, double amount) async
+  {
+     
+     Firestore.instance.collection("users").document(customer.id).updateData({'credit' : customer.credit+amount});
+
+  }
+
+  Future deductCustomerAmount(Customer customer) async
+  {
+     
+     await Firestore.instance.collection("users").document(customer.id).updateData({'credit' : customer.credit});
+
+  }
+
+  
 }
